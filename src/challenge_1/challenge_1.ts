@@ -113,13 +113,31 @@ const parsedNumberToNumber = (parsedNumber: ParsedNumber): number => {
   }
 };
 
-const parseNumbersFromLine = (line: string): ParsedNumber[] => {
-  // TODO: Implement this
-  return ["1", "three"];
+const parseNumbersFromLine = (
+  line: string,
+  numbers: ParsedNumber[]
+): ParsedNumber[] => {
+  if (line === "") return numbers;
+
+  let newNumbers = [...numbers];
+  let newLine: string | null = null;
+  for (let i = 0; i < allParsedNumbers.length; i++) {
+    const parsedNumber = allParsedNumbers[i];
+    const valueToCheck = line.toLowerCase().slice(0, parsedNumber.length);
+
+    if (valueToCheck !== parsedNumber) continue;
+
+    newNumbers = [...newNumbers, parsedNumber];
+    newLine = line.slice(parsedNumber.length);
+  }
+  return parseNumbersFromLine(
+    newLine !== null ? newLine : line.slice(1),
+    newNumbers
+  );
 };
 
 const newCalibrationValueFromLine = (line: string): number => {
-  const parsedNumbers = parseNumbersFromLine(line);
+  const parsedNumbers = parseNumbersFromLine(line, []);
   if (parsedNumbers.length === 0) return 0;
   if (parsedNumbers.length === 1) {
     const number = parsedNumberToNumber(parsedNumbers[0]);
@@ -149,7 +167,6 @@ export const challenge_1 = async () => {
   let calibrationValueSum = 0;
   for await (const line of rl) {
     calibrationValueSum += newCalibrationValueFromLine(line);
-    console.log({ calibrationValueSum });
   }
 
   // 6. Log the sum of all calibration values
