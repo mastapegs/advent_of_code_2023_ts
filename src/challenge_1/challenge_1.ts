@@ -3,7 +3,7 @@ import path from "path";
 import readline from "readline";
 import { fileURLToPath } from "url";
 
-type ParsedNumber =
+type Digit =
   | "1"
   | "one"
   | "2"
@@ -23,7 +23,7 @@ type ParsedNumber =
   | "9"
   | "nine";
 
-const allParsedNumbers: ParsedNumber[] = [
+const allDigits: Digit[] = [
   "1",
   "one",
   "2",
@@ -44,8 +44,8 @@ const allParsedNumbers: ParsedNumber[] = [
   "nine",
 ];
 
-const parsedNumberToNumber = (parsedNumber: ParsedNumber): number => {
-  switch (parsedNumber) {
+const digitToNumber = (digit: Digit): number => {
+  switch (digit) {
     case "1":
     case "one":
       return 1;
@@ -74,21 +74,18 @@ const parsedNumberToNumber = (parsedNumber: ParsedNumber): number => {
     case "nine":
       return 9;
     default:
-      parsedNumber satisfies never;
-      throw new Error("Invalid parsed number");
+      digit satisfies never;
+      throw new Error("Invalid digit");
   }
 };
 
-const parseNumbersFromLine = (
-  line: string,
-  numbers: ParsedNumber[]
-): ParsedNumber[] => {
+const parseDigitsFromLine = (line: string, numbers: Digit[]): Digit[] => {
   if (line === "") return numbers;
 
   let newNumbers = [...numbers];
   let newLine: string | null = null;
-  for (let i = 0; i < allParsedNumbers.length; i++) {
-    const parsedNumber = allParsedNumbers[i];
+  for (let i = 0; i < allDigits.length; i++) {
+    const parsedNumber = allDigits[i];
     const valueToCheck = line.toLowerCase().slice(0, parsedNumber.length);
 
     if (valueToCheck !== parsedNumber) continue;
@@ -96,41 +93,43 @@ const parseNumbersFromLine = (
     newNumbers = [...newNumbers, parsedNumber];
     newLine = line.slice(1);
   }
-  return parseNumbersFromLine(
+  return parseDigitsFromLine(
     newLine !== null ? newLine : line.slice(1),
     newNumbers
   );
 };
 
 const calibrationValueFromLine = (line: string): number => {
-  const parsedNumbers = parseNumbersFromLine(line, []);
-  if (parsedNumbers.length === 0) return 0;
-  if (parsedNumbers.length === 1) {
-    const number = parsedNumberToNumber(parsedNumbers[0]);
+  // 4. For each line, turn that line into an array of valid "digits"
+  const parsedDigits = parseDigitsFromLine(line, []);
+  if (parsedDigits.length === 0) return 0;
+
+  if (parsedDigits.length === 1) {
+    const number = digitToNumber(parsedDigits[0]);
     return Number(`${number}${number}`);
   }
-  const firstNumber = parsedNumberToNumber(parsedNumbers[0]);
-  const secondNumber = parsedNumberToNumber(
-    parsedNumbers[parsedNumbers.length - 1]
-  );
+
+  const firstNumber = digitToNumber(parsedDigits[0]);
+  const secondNumber = digitToNumber(parsedDigits[parsedDigits.length - 1]);
   return Number(`${firstNumber}${secondNumber}`);
 };
 
 export const challenge_1 = async () => {
+  // 1. Grab the path to the data file
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const pathName = path.join(__dirname, "../../data/challenge_1_data.txt");
 
+  // 2. Prepare to Read the file line by line
   const fileStream = fs.createReadStream(pathName);
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity,
   });
 
-  let counter = 0;
+  // 3. Read the file line by line, grabbing the calibration value from each line and adding it to the sum
   let calibrationValueSum = 0;
   for await (const line of rl) {
-    counter++;
     const calibrationValue = calibrationValueFromLine(line);
     calibrationValueSum += calibrationValue;
   }
