@@ -117,19 +117,16 @@ const calibrationValueFromLine = (line: string): number => {
 };
 
 export const challenge_1 = async () => {
-  // 1. Grab file containing lines with calibration values
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const pathName = path.join(__dirname, "../../data/challenge_1_data.txt");
 
-  // 2. Prepare to read from file, line by line
   const fileStream = fs.createReadStream(pathName);
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity,
   });
 
-  // 3. Read each line, and extract the calibration value, and add it to sum
   let counter = 0;
   let calibrationValueSum = 0;
   for await (const line of rl) {
@@ -138,6 +135,5 @@ export const challenge_1 = async () => {
     calibrationValueSum += calibrationValue;
   }
 
-  // 6. Log the sum of all calibration values
   console.log({ calibrationValueSum });
 };
