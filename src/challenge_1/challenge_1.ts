@@ -48,9 +48,7 @@ type ParsedNumber =
   | "8"
   | "eight"
   | "9"
-  | "nine"
-  | "0"
-  | "zero";
+  | "nine";
 
 const allParsedNumbers: ParsedNumber[] = [
   "1",
@@ -71,8 +69,6 @@ const allParsedNumbers: ParsedNumber[] = [
   "eight",
   "9",
   "nine",
-  "0",
-  "zero",
 ];
 
 const parsedNumberToNumber = (parsedNumber: ParsedNumber): number => {
@@ -104,9 +100,6 @@ const parsedNumberToNumber = (parsedNumber: ParsedNumber): number => {
     case "9":
     case "nine":
       return 9;
-    case "0":
-    case "zero":
-      return 0;
     default:
       parsedNumber satisfies never;
       throw new Error("Invalid parsed number");
@@ -169,6 +162,8 @@ export const challenge_1 = async () => {
     const calibrationValue = newCalibrationValueFromLine(line);
     calibrationValueSum += calibrationValue;
     console.log({ line, calibrationValue });
+    if (calibrationValue === 0)
+      console.log({ ERROR: "Calibration value is 0" });
   }
 
   // 6. Log the sum of all calibration values
