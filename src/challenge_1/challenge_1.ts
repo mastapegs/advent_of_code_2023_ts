@@ -112,7 +112,7 @@ const calibrationValueFromLine = (line: string): number => {
     return Number(`${number}${number}`);
   }
 
-  // 7. Otherwise, return the calibration value of the first digit repeated twice
+  // 7. Otherwise, return the calibration value of the first and last digit
   const firstNumber = digitToNumber(parsedDigits[0]);
   const secondNumber = digitToNumber(parsedDigits[parsedDigits.length - 1]);
   return Number(`${firstNumber}${secondNumber}`);
