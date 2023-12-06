@@ -3,33 +3,6 @@ import path from "path";
 import readline from "readline";
 import { fileURLToPath } from "url";
 
-function isCharacterANumber(char: string) {
-  return !isNaN(+char);
-}
-
-const calibrationValueFromLine = (line: string): number => {
-  let calibrationValueString = "";
-
-  // 4. For each line find the first and last number
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    const charIsANumber = isCharacterANumber(char);
-    if (!charIsANumber) continue;
-    calibrationValueString = `${calibrationValueString}${char}`;
-    break;
-  }
-  for (let i = line.length - 1; i >= 0; i--) {
-    const char = line[i];
-    const charIsANumber = isCharacterANumber(char);
-    if (!charIsANumber) continue;
-    calibrationValueString = `${calibrationValueString}${char}`;
-    break;
-  }
-
-  // 5. Return the calibration value
-  return Number(calibrationValueString);
-};
-
 type ParsedNumber =
   | "1"
   | "one"
@@ -121,7 +94,7 @@ const parseNumbersFromLine = (
     if (valueToCheck !== parsedNumber) continue;
 
     newNumbers = [...newNumbers, parsedNumber];
-    newLine = line.slice(parsedNumber.length);
+    newLine = line.slice(1);
   }
   return parseNumbersFromLine(
     newLine !== null ? newLine : line.slice(1),
@@ -129,7 +102,7 @@ const parseNumbersFromLine = (
   );
 };
 
-const newCalibrationValueFromLine = (line: string): number => {
+const calibrationValueFromLine = (line: string): number => {
   const parsedNumbers = parseNumbersFromLine(line, []);
   if (parsedNumbers.length === 0) return 0;
   if (parsedNumbers.length === 1) {
@@ -157,13 +130,12 @@ export const challenge_1 = async () => {
   });
 
   // 3. Read each line, and extract the calibration value, and add it to sum
+  let counter = 0;
   let calibrationValueSum = 0;
   for await (const line of rl) {
-    const calibrationValue = newCalibrationValueFromLine(line);
+    counter++;
+    const calibrationValue = calibrationValueFromLine(line);
     calibrationValueSum += calibrationValue;
-    console.log({ line, calibrationValue });
-    if (calibrationValue === 0)
-      console.log({ ERROR: "Calibration value is 0" });
   }
 
   // 6. Log the sum of all calibration values
