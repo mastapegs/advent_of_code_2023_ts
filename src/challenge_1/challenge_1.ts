@@ -166,7 +166,9 @@ export const challenge_1 = async () => {
   // 3. Read each line, and extract the calibration value, and add it to sum
   let calibrationValueSum = 0;
   for await (const line of rl) {
-    calibrationValueSum += newCalibrationValueFromLine(line);
+    const calibrationValue = newCalibrationValueFromLine(line);
+    calibrationValueSum += calibrationValue;
+    console.log({ line, calibrationValue });
   }
 
   // 6. Log the sum of all calibration values
