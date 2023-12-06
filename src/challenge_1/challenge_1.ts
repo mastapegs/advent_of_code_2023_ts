@@ -30,6 +30,108 @@ const calibrationValueFromLine = (line: string): number => {
   return Number(calibrationValueString);
 };
 
+type ParsedNumber =
+  | "1"
+  | "one"
+  | "2"
+  | "two"
+  | "3"
+  | "three"
+  | "4"
+  | "four"
+  | "5"
+  | "five"
+  | "6"
+  | "six"
+  | "7"
+  | "seven"
+  | "8"
+  | "eight"
+  | "9"
+  | "nine"
+  | "0"
+  | "zero";
+
+const allParsedNumbers: ParsedNumber[] = [
+  "1",
+  "one",
+  "2",
+  "two",
+  "3",
+  "three",
+  "4",
+  "four",
+  "5",
+  "five",
+  "6",
+  "six",
+  "7",
+  "seven",
+  "8",
+  "eight",
+  "9",
+  "nine",
+  "0",
+  "zero",
+];
+
+const parsedNumberToNumber = (parsedNumber: ParsedNumber): number => {
+  switch (parsedNumber) {
+    case "1":
+    case "one":
+      return 1;
+    case "2":
+    case "two":
+      return 2;
+    case "3":
+    case "three":
+      return 3;
+    case "4":
+    case "four":
+      return 4;
+    case "5":
+    case "five":
+      return 5;
+    case "6":
+    case "six":
+      return 6;
+    case "7":
+    case "seven":
+      return 7;
+    case "8":
+    case "eight":
+      return 8;
+    case "9":
+    case "nine":
+      return 9;
+    case "0":
+    case "zero":
+      return 0;
+    default:
+      parsedNumber satisfies never;
+      throw new Error("Invalid parsed number");
+  }
+};
+
+const parseNumbersFromLine = (line: string): ParsedNumber[] => {
+  // TODO: Implement this
+  return ["1", "three"];
+};
+
+const newCalibrationValueFromLine = (line: string): number => {
+  const parsedNumbers = parseNumbersFromLine(line);
+  if (parsedNumbers.length === 0) return 0;
+  if (parsedNumbers.length === 1) {
+    const number = parsedNumberToNumber(parsedNumbers[0]);
+    return Number(`${number}${number}`);
+  }
+  const firstNumber = parsedNumberToNumber(parsedNumbers[0]);
+  const secondNumber = parsedNumberToNumber(
+    parsedNumbers[parsedNumbers.length - 1]
+  );
+  return Number(`${firstNumber}${secondNumber}`);
+};
+
 export const challenge_1 = async () => {
   // 1. Grab file containing lines with calibration values
   const __filename = fileURLToPath(import.meta.url);
@@ -46,7 +148,8 @@ export const challenge_1 = async () => {
   // 3. Read each line, and extract the calibration value, and add it to sum
   let calibrationValueSum = 0;
   for await (const line of rl) {
-    calibrationValueSum += calibrationValueFromLine(line);
+    calibrationValueSum += newCalibrationValueFromLine(line);
+    console.log({ calibrationValueSum });
   }
 
   // 6. Log the sum of all calibration values
