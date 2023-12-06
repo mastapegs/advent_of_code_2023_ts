@@ -13,22 +13,16 @@ const calibrationValueFromLine = (line: string): number => {
     const char = line[i];
     const charIsANumber = isCharacterANumber(char);
     if (!charIsANumber) continue;
-
-    console.debug({ char, isCharacterANumber: charIsANumber });
     calibrationValueString = `${calibrationValueString}${char}`;
-    console.debug({ calibrationValueString });
     break;
   }
   for (let i = line.length - 1; i >= 0; i--) {
     const char = line[i];
     const charIsANumber = isCharacterANumber(char);
     if (!charIsANumber) continue;
-
-    console.debug({ char, isCharacterANumber: charIsANumber });
     calibrationValueString = `${calibrationValueString}${char}`;
     break;
   }
-  console.debug({ calibrationValueString });
   return Number(calibrationValueString);
 };
 
@@ -43,10 +37,10 @@ export const challenge_1 = async () => {
     crlfDelay: Infinity,
   });
 
-  let sum = 0;
+  let calibrationValueSum = 0;
   for await (const line of rl) {
-    sum += calibrationValueFromLine(line);
+    calibrationValueSum += calibrationValueFromLine(line);
   }
 
-  console.log({ sum });
+  console.log({ calibrationValueSum });
 };
