@@ -29,7 +29,7 @@ const calibrationValueFromLine = (line: string): number => {
 export const challenge_1 = async () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
-  const pathName = path.join(__dirname, "../../data/sample_data.txt");
+  const pathName = path.join(__dirname, "../../data/challenge_1_data.txt");
 
   const fileStream = fs.createReadStream(pathName);
   const rl = readline.createInterface({
