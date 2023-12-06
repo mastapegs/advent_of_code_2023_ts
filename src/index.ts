@@ -1,3 +1,3 @@
-import fs from "fs";
+import { challenge_1 } from "./challenge_1/challenge_1.js";
 
-console.log("Hello World!");
+challenge_1();
