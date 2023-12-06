@@ -100,15 +100,19 @@ const parseDigitsFromLine = (line: string, numbers: Digit[]): Digit[] => {
 };
 
 const calibrationValueFromLine = (line: string): number => {
-  // 4. For each line, turn that line into an array of valid "digits"
+  // 4. For each line, turn that line into an array of valid "digits", removing the bad characters
   const parsedDigits = parseDigitsFromLine(line, []);
+
+  // 5. Just in case the list of digits is empty, return calibration value of 0
   if (parsedDigits.length === 0) return 0;
 
+  // 6. If the list of digits is only 1 digit long, return the calibration value of that digit repeated twice
   if (parsedDigits.length === 1) {
     const number = digitToNumber(parsedDigits[0]);
     return Number(`${number}${number}`);
   }
 
+  // 7. Otherwise, return the calibration value of the first digit repeated twice
   const firstNumber = digitToNumber(parsedDigits[0]);
   const secondNumber = digitToNumber(parsedDigits[parsedDigits.length - 1]);
   return Number(`${firstNumber}${secondNumber}`);
@@ -134,5 +138,6 @@ export const challenge_1 = async () => {
     calibrationValueSum += calibrationValue;
   }
 
+  // 8. Log the sum of all calibration values
   console.log({ calibrationValueSum });
 };
